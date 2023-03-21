@@ -31,7 +31,7 @@ include_directories(jpcommon mecab/src mecab2njd njd njd2jpcommon njd_set_accent
                     njd_set_accent_type njd_set_digit njd_set_long_vowel
                     njd_set_pronunciation njd_set_unvoiced_vowel text2mecab)
 
-add_library(openjtalk ${libjpcommon_source} ${libmecab_source} ${libmecab2njd_source}
+add_library(openjtalk STATIC ${libjpcommon_source} ${libmecab_source} ${libmecab2njd_source}
                       ${libnjd_source} ${libnjd2jpcommon_source}
                       ${libnjd_set_accent_phrase_source} ${libnjd_set_accent_type_source}
                       ${libnjd_set_digit_source} ${libnjd_set_long_vowel_source}

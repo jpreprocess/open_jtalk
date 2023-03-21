@@ -38,6 +38,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./open_jtalk/src/build/libopenjtalk.so
+            ./open_jtalk/src/build/libopenjtalk.a
             ./open_jtalk/src/build/mecab_dict_index
             ./open_jtalk/src/build/openjtalk_bin
