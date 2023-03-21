@@ -105,14 +105,14 @@ static int Open_JTalk_load(Open_JTalk * open_jtalk, char *dn_mecab, char *fn_voi
       Open_JTalk_clear(open_jtalk);
       return 0;
    }
-   if (HTS_Engine_load(&open_jtalk->engine, &fn_voice, 1) != TRUE) {
-      Open_JTalk_clear(open_jtalk);
-      return 0;
-   }
-   if (strcmp(HTS_Engine_get_fullcontext_label_format(&open_jtalk->engine), "HTS_TTS_JPN") != 0) {
-      Open_JTalk_clear(open_jtalk);
-      return 0;
-   }
+   // if (HTS_Engine_load(&open_jtalk->engine, &fn_voice, 1) != TRUE) {
+   //    Open_JTalk_clear(open_jtalk);
+   //    return 0;
+   // }
+   // if (strcmp(HTS_Engine_get_fullcontext_label_format(&open_jtalk->engine), "HTS_TTS_JPN") != 0) {
+   //    Open_JTalk_clear(open_jtalk);
+   //    return 0;
+   // }
    return 1;
 }
 
@@ -182,25 +182,37 @@ static int Open_JTalk_synthesis(Open_JTalk * open_jtalk, const char *txt, FILE *
    njd_set_accent_type(&open_jtalk->njd);
    njd_set_unvoiced_vowel(&open_jtalk->njd);
    njd_set_long_vowel(&open_jtalk->njd);
+
+   printf("[NJD]\n");
+   NJD_print(&open_jtalk->njd);
+
    njd2jpcommon(&open_jtalk->jpcommon, &open_jtalk->njd);
    JPCommon_make_label(&open_jtalk->jpcommon);
-   if (JPCommon_get_label_size(&open_jtalk->jpcommon) > 2) {
-      if (HTS_Engine_synthesize_from_strings
-          (&open_jtalk->engine, JPCommon_get_label_feature(&open_jtalk->jpcommon),
-           JPCommon_get_label_size(&open_jtalk->jpcommon)) == TRUE)
-         result = 1;
-      if (wavfp != NULL)
-         HTS_Engine_save_riff(&open_jtalk->engine, wavfp);
-      if (logfp != NULL) {
-         fprintf(logfp, "[Text analysis result]\n");
-         NJD_fprint(&open_jtalk->njd, logfp);
-         fprintf(logfp, "\n[Output label]\n");
-         HTS_Engine_save_label(&open_jtalk->engine, logfp);
-         fprintf(logfp, "\n");
-         HTS_Engine_save_information(&open_jtalk->engine, logfp);
-      }
-      HTS_Engine_refresh(&open_jtalk->engine);
+
+   printf("[JPCommon Features]\n");
+   char **features = JPCommon_get_label_feature(&open_jtalk->jpcommon);
+   for (int i = 0; i < JPCommon_get_label_size(&open_jtalk->jpcommon); i++)
+   {
+      printf("%s\n", features[i]);
    }
+
+   // if (JPCommon_get_label_size(&open_jtalk->jpcommon) > 2) {
+   //    if (HTS_Engine_synthesize_from_strings
+   //        (&open_jtalk->engine, JPCommon_get_label_feature(&open_jtalk->jpcommon),
+   //         JPCommon_get_label_size(&open_jtalk->jpcommon)) == TRUE)
+   //       result = 1;
+   //    if (wavfp != NULL)
+   //       HTS_Engine_save_riff(&open_jtalk->engine, wavfp);
+   //    if (logfp != NULL) {
+   //       fprintf(logfp, "[Text analysis result]\n");
+   //       NJD_fprint(&open_jtalk->njd, logfp);
+   //       fprintf(logfp, "\n[Output label]\n");
+   //       HTS_Engine_save_label(&open_jtalk->engine, logfp);
+   //       fprintf(logfp, "\n");
+   //       HTS_Engine_save_information(&open_jtalk->engine, logfp);
+   //    }
+   //    HTS_Engine_refresh(&open_jtalk->engine);
+   // }
    JPCommon_refresh(&open_jtalk->jpcommon);
    NJD_refresh(&open_jtalk->njd);
    Mecab_refresh(&open_jtalk->mecab);
@@ -321,14 +333,14 @@ int main(int argc, char **argv)
    }
 
    /* get HTS voice file name */
-   for (i = 0; i < argc; i++) {
-      if (argv[i][0] == '-' && argv[i][1] == 'm')
-         fn_voice = argv[++i];
-   }
-   if (fn_voice == NULL) {
-      fprintf(stderr, "Error: HTS voice must be specified.\n");
-      exit(1);
-   }
+   // for (i = 0; i < argc; i++) {
+   //    if (argv[i][0] == '-' && argv[i][1] == 'm')
+   //       fn_voice = argv[++i];
+   // }
+   // if (fn_voice == NULL) {
+   //    fprintf(stderr, "Error: HTS voice must be specified.\n");
+   //    exit(1);
+   // }
 
    /* load dictionary and HTS voice */
    if (Open_JTalk_load(&open_jtalk, dn_dict, fn_voice) != TRUE) {
@@ -437,9 +449,9 @@ int main(int argc, char **argv)
    /* synthesize */
    fgets(buff, MAXBUFLEN - 1, txtfp);
    if (Open_JTalk_synthesis(&open_jtalk, buff, wavfp, logfp) != TRUE) {
-      fprintf(stderr, "Error: waveform cannot be synthesized.\n");
-      Open_JTalk_clear(&open_jtalk);
-      exit(1);
+      // fprintf(stderr, "Error: waveform cannot be synthesized.\n");
+      // Open_JTalk_clear(&open_jtalk);
+      // exit(1);
    }
 
    /* free memory */
