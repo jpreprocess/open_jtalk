@@ -34,13 +34,10 @@ jobs:
         run: |
           cmake -D CMAKE_BUILD_TYPE=Release -D BUILD_SHARED_LIBS=ON -D CMAKE_INCLUDE_PATH=../../hts_engine_API/src/include -D CMAKE_LIBRARY_PATH=../../hts_engine_API/src/build/lib -S . -B build
           cmake --build build --config Release
-      - name: Debug
-        run: |
-          ls -l ./open_jtalk/src/build/
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./open_jtalk/src/build/lib*
+            ./open_jtalk/src/build/libopenjtalk.so
             ./open_jtalk/src/build/mecab_dict_index
             ./open_jtalk/src/build/openjtalk_bin
