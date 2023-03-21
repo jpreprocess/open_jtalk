@@ -34,4 +34,4 @@ jobs:
           cmake --build build --config Release
       - name: Debug
         run: |
-          ls ./open_jtalk/src/bin
+          ls -l ./open_jtalk/src/build/

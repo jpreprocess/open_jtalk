@@ -40,6 +40,13 @@ add_library(openjtalk ${libjpcommon_source} ${libmecab_source} ${libmecab2njd_so
 set_target_properties(openjtalk PROPERTIES VERSION ${OPEN_JTALK_VERSION})
 set_target_properties(openjtalk PROPERTIES SO_VERSION ${OPEN_JTALK_VERSION})
 
+# openjtalk executable
+add_executable(openjtalk_bin bin/open_jtalk.c)
+target_link_libraries(openjtalk_bin PRIVATE openjtalk)
+
+# mecab_dict_index executable
+add_executable(mecab_dict_index mecab/src/mecab-dict-index.cpp ${libmecab_source})
+
 # generate mecab/config.h
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
@@ -102,7 +109,7 @@ if(NOT HTS_ENGINE_LIB)
 endif()
 
 if(HTS_ENGINE_INCLUDE_DIR AND HTS_ENGINE_LIB)
-  target_link_libraries(openjtalk ${HTS_ENGINE_LIB})
+  target_link_libraries(openjtalk ${HTS_ENGINE_LIB} m)
   include_directories(openjtalk ${HTS_ENGINE_INCLUDE_DIR})
 else()
   message(FATAL_ERROR "Required HTSEngine not found")
