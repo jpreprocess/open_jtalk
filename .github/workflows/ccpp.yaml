@@ -2,9 +2,8 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ 'jpreprocess', '1.11']
-  pull_request:
-    branches: [ 'jpreprocess', '1.11' ]
+    tags:
+      - "v*.*.*"
 
 jobs:
   build:
@@ -35,3 +34,10 @@ jobs:
       - name: Debug
         run: |
           ls -l ./open_jtalk/src/build/
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./open_jtalk/src/build/lib*
+            ./open_jtalk/src/build/mecab_dict_index
+            ./open_jtalk/src/build/openjtalk_bin
