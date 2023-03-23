@@ -35,11 +35,11 @@ jobs:
           cmake -D CMAKE_BUILD_TYPE=Release -D BUILD_SHARED_LIBS=ON -D CMAKE_INCLUDE_PATH=../../hts_engine_API/src/include -D CMAKE_LIBRARY_PATH=../../hts_engine_API/src/build/lib -S . -B build
           cmake --build build --config Release
       - name: Build dictionary
-        working-directory: ./open_jtalk/src
+        working-directory: ./open_jtalk/src/build
         run: |
-          mkdir build/mecab-naist-jdic
-          build/mecab_dict_index -d mecab-naist-jdic -o build/mecab-naist-jdic
-          tar czf build/mecab-naist-jdic.tar.gz build/mecab-naist-jdic
+          mkdir mecab-naist-jdic
+          ./mecab_dict_index -d ../mecab-naist-jdic -o mecab-naist-jdic
+          tar czf mecab-naist-jdic.tar.gz mecab-naist-jdic
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
